@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/components/onbording_text/onbording_text.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
 import '../../../components/home/addtaskscustomfield/addtasksformfield/addtextformfield.dart';
 import '../../../components/home/search_texformfield/search_texformfield.dart';
 import '../home_screen.dart';
+import 'package:intl/intl.dart';
 class AddTasks extends StatefulWidget {
    AddTasks({super.key});
 
@@ -15,6 +18,7 @@ TextEditingController taskcontroller=TextEditingController();
 TextEditingController workcontroller=TextEditingController();
 TextEditingController addtaskcontroller=TextEditingController();
 class _AddTasksState extends State<AddTasks> {
+
 
   List<String>list1=[];
   //add tasks functions
@@ -83,11 +87,23 @@ class _AddTasksState extends State<AddTasks> {
                   padding: const EdgeInsets.only(left: 30,top: 10),
                   child:Row(
                     children: [
-                      Container(
-                        height: 22,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage('assets/add_tasks/date.png'),
+                      InkWell(
+                        onTap: ()async{
+
+                          DateTime? datePicked= await  showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1950),
+                            initialDate:DateTime.now() ,
+                            lastDate: DateTime.now(),
+
+                          );
+                        },
+                        child: Container(
+                          height: 22,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assets/add_tasks/date.png'),
+                            ),
                           ),
                         ),
                       ),
@@ -100,11 +116,21 @@ class _AddTasksState extends State<AddTasks> {
                   padding: const EdgeInsets.only(left: 30,top: 15),
                   child:Row(
                     children: [
-                      Container(
-                        height: 22,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage('assets/add_tasks/time.png'),
+                      InkWell(
+                        onTap:()async{
+                          TimeOfDay? pickedTime= await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              initialEntryMode: TimePickerEntryMode.dial
+
+                          );
+                        },
+                        child: Container(
+                          height: 22,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assets/add_tasks/time.png'),
+                            ),
                           ),
                         ),
                       ),
@@ -122,14 +148,18 @@ class _AddTasksState extends State<AddTasks> {
                   padding: const EdgeInsets.only(left: 30,top: 15),
                   child:Row(
                     children: [
-                      Container(
-                        height: 22,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage('assets/add_tasks/notification.png'),
+                      InkWell(
+                  
+                        child:  Container(
+                          height: 22,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assets/add_tasks/notification.png'),
+                            ),
                           ),
                         ),
                       ),
+
                       OnbordingText(text1: 'Set Reminder', color: Appcolors.black,
                           size: 13, fontWeight: FontWeight.normal),
                     ],

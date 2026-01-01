@@ -17,6 +17,8 @@ TextEditingController namecontroller=TextEditingController();
 TextEditingController emailcontroller=TextEditingController();
 TextEditingController passwordcontroller=TextEditingController();
 class _SignUpState extends State<SignUp> {
+  bool isLoading=false;
+  String text='';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,14 +106,30 @@ class _SignUpState extends State<SignUp> {
             ),
 
             //sign up button
-            Padding(
+            isLoading?CircularProgressIndicator():Padding(
                 padding: const EdgeInsets.only(left: 30,top: 50),
                 child: InkWell(
                   onTap: ()
                   async
                   {
+                    isLoading=true;
+                    setState(() {
+
+                    });
                 await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: emailcontroller.text, password: passwordcontroller.text);
+                    email: emailcontroller.text,
+                    password: passwordcontroller.text).then((onValue){
+                      isLoading=false;
+                      setState(() {
+
+                      });
+                }).onError((error,handleError){
+                  isLoading=false;
+                  setState(() {
+
+                  });
+                  print('error:$text{error}'.toString());
+                });
 
                   },
                   child: LetsStartButton(height: 40, width: 300, text1: 'Sign Up', size: 20, fontWeight: FontWeight.w600,

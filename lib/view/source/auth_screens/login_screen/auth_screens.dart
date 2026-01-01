@@ -18,6 +18,7 @@ class AuthScreens extends StatefulWidget {
 TextEditingController emailcontroller=TextEditingController();
 TextEditingController passwordcontroller=TextEditingController();
 class _AuthScreensState extends State<AuthScreens> {
+  bool isLoading=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,15 +83,25 @@ class _AuthScreensState extends State<AuthScreens> {
                         child: InkWell(
                           onTap: ()
                           async
-                          {
-                            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                email: emailcontroller.text, password: passwordcontroller.text).then((onValue){
-                                  print('data saved successfullyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-                            }).onError((error,handleError){
-                              print('\error:-------$error -================------------------=-=-=-=-=-');
-                            });
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>BotomNavigation_bar()));
-                          },
+                         {
+                           await FirebaseAuth.instance.signInWithEmailAndPassword(
+                               email: emailcontroller.text, password: passwordcontroller.text)
+                               .then((onValue){
+                                 isLoading=false;
+                                 setState(() {
+
+                                 });
+                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                           }).
+                           onError((handleError,error){
+                             isLoading=false;
+                             setState(() {
+
+                             });
+                             print("error$error{error}");
+                           });
+                         },
+
                           child: LetsStartButton(height: 40, width: 300, text1: 'Login', size: 20, fontWeight: FontWeight.w600,
                             colortext: Appcolors.white, colorCont: Appcolors.maincolor,),
                         )
