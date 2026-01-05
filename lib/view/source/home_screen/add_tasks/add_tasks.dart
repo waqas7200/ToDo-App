@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/components/onbording_text/onbording_text.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
@@ -17,17 +18,25 @@ class AddTasks extends StatefulWidget {
 TextEditingController taskcontroller=TextEditingController();
 TextEditingController workcontroller=TextEditingController();
 TextEditingController addtaskcontroller=TextEditingController();
+
 class _AddTasksState extends State<AddTasks> {
+  DateTime? selectedate;
+  TimeOfDay? selectedtime;
 
-
-  List<String>list1=[];
+  List<Map<String,String>>list1=[];
   //add tasks functions
   void Add(){
     if(taskcontroller.text.isNotEmpty)
       {
         setState(() {
-          list1.add(taskcontroller.text);
+          list1.add({
+            'task':taskcontroller.text,
+             'date':selectedate==null?"":DateFormat('dd-MM-YY').format(selectedate!),
+            'time':selectedtime==null?"":selectedtime!.format(context),
+          });
           taskcontroller.clear();
+          selectedtime=null;
+          selectedate=null;
         });
       }
   }
@@ -92,11 +101,16 @@ class _AddTasksState extends State<AddTasks> {
 
                           DateTime? datePicked= await  showDatePicker(
                             context: context,
-                            firstDate: DateTime(1950),
+                            firstDate: DateTime.now(),
                             initialDate:DateTime.now() ,
-                            lastDate: DateTime.now(),
+                            lastDate: DateTime(2030),
 
                           );
+                          if(selectedate!=null){
+                            setState(() {
+                              selectedate=datePicked;
+                            });
+                          }
                         },
                         child: Container(
                           height: 22,
@@ -122,8 +136,12 @@ class _AddTasksState extends State<AddTasks> {
                               context: context,
                               initialTime: TimeOfDay.now(),
                               initialEntryMode: TimePickerEntryMode.dial
-
                           );
+                          if(selectedtime!=null){
+                            setState(() {
+                              selectedtime=pickedTime;
+                            });
+                          }
                         },
                         child: Container(
                           height: 22,
@@ -177,6 +195,7 @@ class _AddTasksState extends State<AddTasks> {
                     Addtextformfield(fieldtext: 'write notes here',
                       controller:addtaskcontroller ,
                       suficon: Icons.keyboard_arrow_down_outlined,
+
                       height: 200,
                       containercolor: Appcolors.liteblue,
                     )
@@ -192,8 +211,13 @@ class _AddTasksState extends State<AddTasks> {
                           itemBuilder: (context,index){
                             return Card(child:
                             ListTile(
-                              title: Text(list1[index]),
-                              trailing:TextButton(onPressed: ()=>Delete(index), child:Icon(Icons.delete))
+                              title: Text(
+                                  "${list1[index]['task']}"
+                              ),
+                              subtitle: Text(
+                                "date:${list1[index][selectedate]}  || time:${list1[index][selectedtime]}",style: TextStyle(color: Colors.black),
+                              ),
+                              trailing:TextButton(onPressed: ()=>Delete(index), child:Icon(Icons.delete),)
 
                             )
                             );
@@ -205,9 +229,14 @@ class _AddTasksState extends State<AddTasks> {
         Padding(
           padding: const EdgeInsets.only(top: 450,left: 250),
           child: Center(
-            child: ElevatedButton(onPressed: ()=>Add(), child: CircleAvatar(
-              backgroundColor: Appcolors.liteblue2,
-              child: Icon(Icons.check,color: Appcolors.white,),)),
+            child: InkWell(
+              onTap: ()async{
+                await FirebaseFirestore.instance.collection()
+              },
+              child: CircleAvatar(
+                backgroundColor: Appcolors.liteblue2,
+                child: Icon(Icons.check,color: Appcolors.white,),),
+            ),
           ),
         )
 
