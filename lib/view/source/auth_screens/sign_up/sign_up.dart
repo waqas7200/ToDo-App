@@ -6,6 +6,7 @@ import '../../../components/onbording_text/button/lets_start_button.dart';
 import '../../../components/onbording_text/onbording_text.dart';
 import '../../../components/password_texformfield/password_tex_form_field.dart';
 import '../../../utills/appcolors/appcolors.dart';
+import '../../home_screen/home_screen.dart';
 import '../login_screen/auth_screens.dart';
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -123,12 +124,20 @@ class _SignUpState extends State<SignUp> {
                       setState(() {
 
                       });
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                 }).onError((error,handleError){
                   isLoading=false;
                   setState(() {
 
                   });
-                  print('error:$text{error}'.toString());
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('error:$text{error}',
+                        ),
+                        duration: Duration(seconds: 3),
+                      )
+                  );
+                  //print('error:$text{error}'.toString());
                 });
 
                   },

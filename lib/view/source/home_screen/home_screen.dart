@@ -90,8 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 20, fontWeight: FontWeight.bold),
                     Padding(
                       padding: const EdgeInsets.only(left: 150),
-                      child: OnbordingText(text1: 'See all', color: Appcolors.liteblue2,
-                          size: 15, fontWeight: FontWeight.bold),
+                      child: InkWell(
+                        onTap: (){},
+                        child: OnbordingText(text1: 'See all', color: Appcolors.liteblue2,
+                            size: 15, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],),
                 ),

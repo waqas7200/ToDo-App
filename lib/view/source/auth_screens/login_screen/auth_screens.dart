@@ -98,7 +98,8 @@ class _AuthScreensState extends State<AuthScreens> {
                              setState(() {
 
                              });
-                             print("error$error{error}");
+
+                             //print("error$error{error}");
                            });
                          },
 

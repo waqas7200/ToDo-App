@@ -230,9 +230,9 @@ class _AddTasksState extends State<AddTasks> {
           padding: const EdgeInsets.only(top: 450,left: 250),
           child: Center(
             child: InkWell(
-              onTap: ()async{
-                await FirebaseFirestore.instance.collection()
-              },
+              // onTap: ()async{
+              //   await FirebaseFirestore.instance.collection()
+              // },
               child: CircleAvatar(
                 backgroundColor: Appcolors.liteblue2,
                 child: Icon(Icons.check,color: Appcolors.white,),),
