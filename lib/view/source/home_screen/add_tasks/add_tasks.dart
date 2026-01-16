@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/components/onbording_text/onbording_text.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
@@ -57,8 +58,11 @@ class _AddTasksState extends State<AddTasks> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: OnbordingText(text1:'Cancel', color: Appcolors.litered,
-                size: 16, fontWeight: FontWeight.normal),
+            child: InkWell(
+              onTap: (){Navigator.pop(context);},
+              child: OnbordingText(text1:'Cancel', color: Appcolors.litered,
+                  size: 16, fontWeight: FontWeight.normal),
+            ),
           ),
         ],
       ),
@@ -230,9 +234,12 @@ class _AddTasksState extends State<AddTasks> {
           padding: const EdgeInsets.only(top: 450,left: 250),
           child: Center(
             child: InkWell(
-              // onTap: ()async{
-              //   await FirebaseFirestore.instance.collection()
-              // },
+               onTap: ()async{
+                 String id=DateTime.now().microsecond.toString();
+                 String userid=FirebaseAuth.instance.currentUser!.uid;
+                 await FirebaseFirestore.instance.collection('user').doc(userid)
+                     .collection('insetdata').doc(id).set({});
+               },
               child: CircleAvatar(
                 backgroundColor: Appcolors.liteblue2,
                 child: Icon(Icons.check,color: Appcolors.white,),),

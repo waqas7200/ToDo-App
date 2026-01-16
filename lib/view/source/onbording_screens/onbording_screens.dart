@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
 import '../../components/onbording_text/button/lets_start_button.dart';
 import '../../components/onbording_text/onbording_text.dart';
-import '../auth_screens/login_screen/auth_screens.dart';
+import '../auth_screens/login_screen/lodin.dart';
 class OnbordingScreens extends StatefulWidget {
   const OnbordingScreens({super.key});
 

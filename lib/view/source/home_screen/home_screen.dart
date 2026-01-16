@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/components/onbording_text/onbording_text.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
@@ -48,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: OnbordingText(text1: 'Categories', color: Appcolors.black, size: 20,
                       fontWeight: FontWeight.bold),
                 ),
+
+
+                //Grid vew builder code
                 SizedBox(
                   height: 200,
                   width: 300,
@@ -83,36 +87,50 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } ),
                 ),
+
+
+                //today task code & see all task code both are in one row
                 Padding(
                   padding: const EdgeInsets.only(left: 20,top: 20),
                   child: Row(children: [
                     OnbordingText(text1: 'Today’s task', color: Appcolors.black,
                         size: 20, fontWeight: FontWeight.bold),
+
+                  //see all task
                     Padding(
                       padding: const EdgeInsets.only(left: 150),
                       child: InkWell(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>AddTasks()));
+                        },
                         child: OnbordingText(text1: 'See all', color: Appcolors.liteblue2,
                             size: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
+
                   ],),
                 ),
+
+                //fetching code result here of adding tasks all data
                 Padding(
                     padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
                     child:SizedBox(
                         height: 300,
                         width: double.infinity,
-                        child:ListView.builder(
-                            itemCount: list1.length,
-                            itemBuilder: (context,index){
-                              return Card(child:
-                              ListTile(
-                                title: Text(list1[index]),
-
-                              )
-                              );
-                            })
+                        child:StreamBuilder(
+                            stream: FirebaseFirestore.instance.collection('user').doc()
+                                .collection('insertdata').snapshots(),
+                            builder: builder)
+                        // ListView.builder(
+                        //     itemCount: list1.length,
+                        //     itemBuilder: (context,index){
+                        //       return Card(child:
+                        //       ListTile(
+                        //         title: Text(list1[index]),
+                        //
+                        //       )
+                        //       );
+                        //     })
                     )),
 
               ],

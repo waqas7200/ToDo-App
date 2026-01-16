@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,16 +8,16 @@ import '../../../components/onbording_text/onbording_text.dart';
 import '../../../components/password_texformfield/password_tex_form_field.dart';
 import '../../../utills/appcolors/appcolors.dart';
 import '../../home_screen/home_screen.dart';
-import '../login_screen/auth_screens.dart';
+import '../login_screen/lodin.dart';
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
   @override
   State<SignUp> createState() => _SignUpState();
 }
-TextEditingController namecontroller=TextEditingController();
-TextEditingController emailcontroller=TextEditingController();
-TextEditingController passwordcontroller=TextEditingController();
+final namecontroller=TextEditingController();
+final  emailcontroller=TextEditingController();
+final passwordcontroller=TextEditingController();
 class _SignUpState extends State<SignUp> {
   bool isLoading=false;
   String text='';
@@ -119,10 +120,16 @@ class _SignUpState extends State<SignUp> {
                     });
                 await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: emailcontroller.text,
-                    password: passwordcontroller.text).then((onValue){
+                    password: passwordcontroller.text).then((onValue)async{
                       isLoading=false;
                       setState(() {
 
+                      });
+                      String userid=await FirebaseAuth.instance.currentUser!.uid;
+                      await FirebaseFirestore.instance.collection('user').doc(userid).set({
+                        'name':namecontroller.text,
+                        'email':emailcontroller.text,
+                        'id':userid,
                       });
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                 }).onError((error,handleError){
