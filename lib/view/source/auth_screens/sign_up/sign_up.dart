@@ -7,7 +7,7 @@ import '../../../components/onbording_text/button/lets_start_button.dart';
 import '../../../components/onbording_text/onbording_text.dart';
 import '../../../components/password_texformfield/password_tex_form_field.dart';
 import '../../../utills/appcolors/appcolors.dart';
-import '../../home_screen/home_screen.dart';
+import '../../botom_navigation_bar/Home_screens/home_screen.dart';
 import '../login_screen/lodin.dart';
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

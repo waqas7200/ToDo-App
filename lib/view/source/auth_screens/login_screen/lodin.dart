@@ -7,7 +7,7 @@ import '../../../components/onbording_text/button/lets_start_button.dart';
 import '../../../components/onbording_text/onbording_text.dart';
 import '../../../components/password_texformfield/password_tex_form_field.dart';
 import '../../botom_navigation_bar/botom_navigation-bar.dart';
-import '../../home_screen/home_screen.dart';
+import '../../botom_navigation_bar/Home_screens/home_screen.dart';
 import '../sign_up/sign_up.dart';
 class AuthScreens extends StatefulWidget {
   const AuthScreens({super.key});

@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/utills/appcolors/appcolors.dart';
 import '../../components/onbording_text/button/lets_start_button.dart';
 import '../../components/onbording_text/onbording_text.dart';
 import '../auth_screens/login_screen/lodin.dart';
+import '../botom_navigation_bar/botom_navigation-bar.dart';
+import '../botom_navigation_bar/Home_screens/home_screen.dart';
 class OnbordingScreens extends StatefulWidget {
   const OnbordingScreens({super.key});
 
@@ -11,6 +14,15 @@ class OnbordingScreens extends StatefulWidget {
 }
 
 class _OnbordingScreensState extends State<OnbordingScreens> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user_verification();
+  }
+  user_verification()async{
+    String userid=await FirebaseAuth.instance.currentUser!.uid;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +70,17 @@ class _OnbordingScreensState extends State<OnbordingScreens> {
             Padding(
               padding: const EdgeInsets.only(right: 0,top: 50),
               child: InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AuthScreens()));
+                onTap: ()async{
+                 String userid=await FirebaseAuth.instance.currentUser!.uid;
+                 if(userid==null || userid==""){
+                   Navigator.pushReplacement(context, MaterialPageRoute
+                     (builder: (context)=>AuthScreens()));
+                 }
+                 else {
+                   Navigator.pushReplacement(context, MaterialPageRoute
+                     (builder: (context)=>BotomNavigation_bar()));
+                 }
+
                 },
                 child: LetsStartButton(height: 40, width: 200, text1: 'Lets Start', size: 20, fontWeight: FontWeight.w600,
                   colortext: Appcolors.white, colorCont: Appcolors.maincolor,),
