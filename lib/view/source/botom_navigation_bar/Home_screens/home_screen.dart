@@ -25,7 +25,16 @@ List<home>data=[
 class _HomeScreenState extends State<HomeScreen> {
   String? userid;
   String? user;
+String selected='';
+/*
+ selected='work'
 
+ selected='personal'
+
+ selecetd=''shopping
+
+ selecetd='health'
+* */
   @override
 
   void initState() {
@@ -84,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                // selectedcatagery=index;
                                 setState(() {
                               selectedcatagery=index;
+                              selected = data[index].text.toString();
                                 });
                               },
                               child: Card(child:  Container(
@@ -139,6 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 //fetching code result here of adding tasks all data
+                selected==''?
+
                 Padding(
                     padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
                     child:SizedBox(
@@ -154,74 +166,512 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                               if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
                                 return Center(child:
-                                  Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
                                 );
 
                               }
 
                               return ListView.builder(
-                              itemCount: snapshots.data!.docs.length,
-                              itemBuilder: (context,index){
-                                return Card(
-                                  color: Appcolors.liteblue,
-                                 // shadowColor: Colors.grey.shade400,
-                                  child: ListTile(
-                                    onLongPress: ()async{
-                                      showDialog(context: context, builder:(BuildContext context){
-                                        return AlertDialog(
-                                        //  title: Text('Delete',style: TextStyle(color: Colors.red),),
-                                            content:Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top: 4),
-                                                  child: Text('Are you sure to want to delete it',
-                                                  style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
-                                                  ),),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  itemCount: snapshots.data!.docs.length,
+                                  itemBuilder: (context,index){
+                                    return Card(
+                                      color: Appcolors.liteblue,
+                                      // shadowColor: Colors.grey.shade400,
+                                      child: ListTile(
+                                        onLongPress: ()async{
+                                          showDialog(context: context, builder:(BuildContext context){
+                                            return AlertDialog(
+                                              //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                content:Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.min,
                                                   children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(top: 4),
+                                                      child: Text('Are you sure to want to delete it',
+                                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                        ),),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
 
-                                                    TextButton(onPressed: (){
-                                                      Navigator.pop(context);
-                                                    }, child:Text('cancel',
-                                                      style: TextStyle(color: Colors.blue),), ),
-                                                    TextButton(onPressed: ()async{
-                                                      await FirebaseFirestore.instance.collection('todoapp').doc(userid)
-                                                          .collection('insertdata').doc(snapshots.data!.docs[index].id).delete();
-                                                    Navigator.pop(context);
-                                                      }, child:Text('Delete',
-                                                      style: TextStyle(color: Colors.red),), )
+                                                        TextButton(onPressed: (){
+                                                          Navigator.pop(context);
+                                                        }, child:Text('cancel',
+                                                          style: TextStyle(color: Colors.blue),), ),
+                                                        TextButton(onPressed: ()async{
+                                                          await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                              .collection('insertdata').doc(snapshots.data!.docs[index].id).delete();
+                                                          Navigator.pop(context);
+                                                        }, child:Text('Delete',
+                                                          style: TextStyle(color: Colors.red),), )
+                                                      ],
+                                                    )
                                                   ],
                                                 )
-                                              ],
-                                            )
-                                        );
-                                      });
+                                            );
+                                          });
 
-                                    },
-                                    onTap: ()async{
+                                        },
+                                        onTap: ()async{
 
-                                      Navigator.push(context, MaterialPageRoute(builder:
-                                          (context)=>View(
+                                          Navigator.push(context, MaterialPageRoute(builder:
+                                              (context)=>View(
                                             task: snapshots.data!.docs[index]['task'].toString()??"",
                                             date: snapshots.data!.docs[index]['date'].toString()??"",
                                             time:snapshots.data!.docs[index]['time'].toString()??"",
                                             note: snapshots.data!.docs[index]['note'].toString()??"",
                                             catagery:snapshots.data!.docs[index]['category'].toString() ,)));
-                                    },
-                                    title: Text(snapshots.data!.docs[index]['task'].toString()??""),
-                                    subtitle: Text(snapshots.data!.docs[index]['date']??""),
-                                   trailing: Text(snapshots.data!.docs[index]['time']??""),
-                                  ),
-                                );
-    }
-    );
-    })
+                                        },
+                                        title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                        subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                        trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                      ),
+                                    );
+                                  }
+                              );
+                            })
 
-                    )),
+                    )):
+                selected=='work'?
+                Padding(
+                    padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
+                    child:SizedBox(
+                        height: 300,
+
+                        width: double.infinity,
+                        child:userid==null?CircularProgressIndicator():StreamBuilder(
+                            stream: FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                .collection('insertdata').snapshots(),
+                            builder: (contex,snapshots){
+                              if(snapshots.connectionState==ConnectionState.waiting){
+                                return Center(child: CircularProgressIndicator());
+                              }
+                              if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
+                                return Center(child:
+                                Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                );
+
+                              }
+
+                              return ListView.builder(
+                                  itemCount: snapshots.data!.docs.length,
+                                  itemBuilder: (context,index){
+                                    return
+                                      snapshots.data!.docs[index]['category'].toString()=='work'?
+
+                                      Card(
+                                      color: Appcolors.liteblue,
+                                      // shadowColor: Colors.grey.shade400,
+                                      child: ListTile(
+                                        onLongPress: ()async{
+                                          showDialog(context: context, builder:(BuildContext context){
+                                            return AlertDialog(
+                                              //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                content:Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(top: 4),
+                                                      child: Text('Are you sure to want to delete it',
+                                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                        ),),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+
+                                                        TextButton(onPressed: (){
+                                                          Navigator.pop(context);
+                                                        }, child:Text('cancel',
+                                                          style: TextStyle(color: Colors.blue),), ),
+                                                        TextButton(onPressed: ()async{
+                                                          await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                              .collection('insertdata').doc(snapshots.data!.docs[index].id).delete();
+                                                          Navigator.pop(context);
+                                                        }, child:Text('Delete',
+                                                          style: TextStyle(color: Colors.red),), )
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                            );
+                                          });
+
+                                        },
+                                        onTap: ()async{
+
+                                          Navigator.push(context, MaterialPageRoute(builder:
+                                              (context)=>View(
+                                            task: snapshots.data!.docs[index]['task'].toString()??"",
+                                            date: snapshots.data!.docs[index]['date'].toString()??"",
+                                            time:snapshots.data!.docs[index]['time'].toString()??"",
+                                            note: snapshots.data!.docs[index]['note'].toString()??"",
+                                            catagery:snapshots.data!.docs[index]['category'].toString() ,)));
+                                        },
+                                        title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                        subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                        trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                      ),
+                                    ):SizedBox();
+                                  }
+                              );
+                            })
+
+                    )):
+                    selected=='persnol'?
+                    Padding(
+                        padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
+                        child:SizedBox(
+                            height: 300,
+
+                            width: double.infinity,
+                            child:userid==null?CircularProgressIndicator():StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                    .collection('insertdata').snapshots(),
+                                builder: (contex,snapshots){
+                                  if(snapshots.connectionState==ConnectionState.waiting){
+                                    return Center(child: CircularProgressIndicator());
+                                  }
+                                  if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
+                                    return Center(child:
+                                    Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                    );
+
+                                  }
+
+                                  return ListView.builder(
+                                      itemCount: snapshots.data!.docs.length,
+                                      itemBuilder: (context,index){
+                                        return
+                                          snapshots.data!.docs[index]['category'].toString()=='persnol'?
+
+                                          Card(
+                                            color: Appcolors.liteblue,
+                                            // shadowColor: Colors.grey.shade400,
+                                            child: ListTile(
+                                              onLongPress: ()async{
+                                                showDialog(context: context, builder:(BuildContext context){
+                                                  return AlertDialog(
+                                                    //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                      content:Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(top: 4),
+                                                            child: Text('Are you sure to want to delete it',
+                                                              style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                              ),),
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+
+                                                              TextButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              }, child:Text('cancel',
+                                                                style: TextStyle(color: Colors.blue),), ),
+                                                              TextButton(onPressed: ()async{
+                                                                await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                                    .collection('insertdata').doc(snapshots.data!.docs[index].id).
+                                                                delete();
+                                                                Navigator.pop(context);
+                                                              }, child:Text('Delete',
+                                                                style: TextStyle(color: Colors.red),), )
+                                                            ],
+                                                          )
+                                                        ],
+                                                      )
+                                                  );
+                                                });
+
+                                              },
+                                              onTap: ()async{
+
+                                                Navigator.push(context, MaterialPageRoute(builder:
+                                                    (context)=>View(
+                                                  task: snapshots.data!.docs[index]['task'].toString()??"",
+                                                  date: snapshots.data!.docs[index]['date'].toString()??"",
+                                                  time:snapshots.data!.docs[index]['time'].toString()??"",
+                                                  note: snapshots.data!.docs[index]['note'].toString()??"",
+                                                  catagery:snapshots.data!.docs[index]['category'].toString() ,)));
+                                              },
+                                              title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                              subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                              trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                            ),
+                                          ):SizedBox();
+                                      }
+                                  );
+                                })
+
+                        )):
+                    selected=='shoping'?
+                    Padding(
+                        padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
+                        child:SizedBox(
+                            height: 300,
+
+                            width: double.infinity,
+                            child:userid==null?CircularProgressIndicator():StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                    .collection('insertdata').snapshots(),
+                                builder: (contex,snapshots){
+                                  if(snapshots.connectionState==ConnectionState.waiting){
+                                    return Center(child: CircularProgressIndicator());
+                                  }
+                                  if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
+                                    return Center(child:
+                                    Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                    );
+
+                                  }
+
+                                  return ListView.builder(
+                                      itemCount: snapshots.data!.docs.length,
+                                      itemBuilder: (context,index){
+                                        return
+                                          snapshots.data!.docs[index]['category'].toString()=='shoping'?
+
+                                          Card(
+                                            color: Appcolors.liteblue,
+                                            // shadowColor: Colors.grey.shade400,
+                                            child: ListTile(
+                                              onLongPress: ()async{
+                                                showDialog(context: context, builder:(BuildContext context){
+                                                  return AlertDialog(
+                                                    //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                      content:Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(top: 4),
+                                                            child: Text('Are you sure to want to delete it',
+                                                              style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                              ),),
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+
+                                                              TextButton(onPressed: (){
+                                                                Navigator.pop(context);
+                                                              }, child:Text('cancel',
+                                                                style: TextStyle(color: Colors.blue),), ),
+                                                              TextButton(onPressed: ()async{
+                                                                await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                                    .collection('insertdata').doc(snapshots.data!.docs[index].id).
+                                                                delete();
+                                                                Navigator.pop(context);
+                                                              }, child:Text('Delete',
+                                                                style: TextStyle(color: Colors.red),), )
+                                                            ],
+                                                          )
+                                                        ],
+                                                      )
+                                                  );
+                                                });
+
+                                              },
+                                              onTap: ()async{
+
+                                                Navigator.push(context, MaterialPageRoute(builder:
+                                                    (context)=>View(
+                                                  task: snapshots.data!.docs[index]['task'].toString()??"",
+                                                  date: snapshots.data!.docs[index]['date'].toString()??"",
+                                                  time:snapshots.data!.docs[index]['time'].toString()??"",
+                                                  note: snapshots.data!.docs[index]['note'].toString()??"",
+                                                  catagery:snapshots.data!.docs[index]['category'].toString() ,)));
+                                              },
+                                              title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                              subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                              trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                            ),
+                                          ):SizedBox();
+                                      }
+                                  );
+                                })
+
+                        )):
+                        selected=='Health'?
+                        Padding(
+                            padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
+                            child:SizedBox(
+                                height: 300,
+
+                                width: double.infinity,
+                                child:userid==null?CircularProgressIndicator():StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                        .collection('insertdata').snapshots(),
+                                    builder: (contex,snapshots){
+                                      if(snapshots.connectionState==ConnectionState.waiting){
+                                        return Center(child: CircularProgressIndicator());
+                                      }
+                                      if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
+                                        return Center(child:
+                                        Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                        );
+
+                                      }
+
+                                      return ListView.builder(
+                                          itemCount: snapshots.data!.docs.length,
+                                          itemBuilder: (context,index){
+                                            return
+                                              snapshots.data!.docs[index]['category'].toString()=='Health'?
+
+                                              Card(
+                                                color: Appcolors.liteblue,
+                                                // shadowColor: Colors.grey.shade400,
+                                                child: ListTile(
+                                                  onLongPress: ()async{
+                                                    showDialog(context: context, builder:(BuildContext context){
+                                                      return AlertDialog(
+                                                        //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                          content:Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(top: 4),
+                                                                child: Text('Are you sure to want to delete it',
+                                                                  style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                                  ),),
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+
+                                                                  TextButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  }, child:Text('cancel',
+                                                                    style: TextStyle(color: Colors.blue),), ),
+                                                                  TextButton(onPressed: ()async{
+                                                                    await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                                        .collection('insertdata').doc(snapshots.data!.docs[index].id).
+                                                                    delete();
+                                                                    Navigator.pop(context);
+                                                                  }, child:Text('Delete',
+                                                                    style: TextStyle(color: Colors.red),), )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )
+                                                      );
+                                                    });
+
+                                                  },
+                                                  onTap: ()async{
+
+                                                    Navigator.push(context, MaterialPageRoute(builder:
+                                                        (context)=>View(
+                                                      task: snapshots.data!.docs[index]['task'].toString()??"",
+                                                      date: snapshots.data!.docs[index]['date'].toString()??"",
+                                                      time:snapshots.data!.docs[index]['time'].toString()??"",
+                                                      note: snapshots.data!.docs[index]['note'].toString()??"",
+                                                      catagery:snapshots.data!.docs[index]['category'].toString() ,)));
+                                                  },
+                                                  title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                                  subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                                  trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                                ),
+                                              ):SizedBox();
+                                          }
+                                      );
+                                    })
+
+                            ))
+                :Padding(
+                            padding: const EdgeInsets.only(left: 20,right: 20,top: 30),
+                            child:SizedBox(
+                                height: 300,
+
+                                width: double.infinity,
+                                child:userid==null?CircularProgressIndicator():StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                        .collection('insertdata').snapshots(),
+                                    builder: (contex,snapshots){
+                                      if(snapshots.connectionState==ConnectionState.waiting){
+                                        return Center(child: CircularProgressIndicator());
+                                      }
+                                      if(!snapshots.hasData || snapshots.data!.docs.isEmpty){
+                                        return Center(child:
+                                        Text('No Data is avalibale',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                        );
+
+                                      }
+
+                                      return ListView.builder(
+                                          itemCount: snapshots.data!.docs.length,
+                                          itemBuilder: (context,index){
+                                            return
+                                              snapshots.data!.docs[index]['category'].toString()=='Health'?
+
+                                              Card(
+                                                color: Appcolors.liteblue,
+                                                // shadowColor: Colors.grey.shade400,
+                                                child: ListTile(
+                                                  onLongPress: ()async{
+                                                    showDialog(context: context, builder:(BuildContext context){
+                                                      return AlertDialog(
+                                                        //  title: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                          content:Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(top: 4),
+                                                                child: Text('Are you sure to want to delete it',
+                                                                  style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold
+                                                                  ),),
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+
+                                                                  TextButton(onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  }, child:Text('cancel',
+                                                                    style: TextStyle(color: Colors.blue),), ),
+                                                                  TextButton(onPressed: ()async{
+                                                                    await FirebaseFirestore.instance.collection('todoapp').doc(userid)
+                                                                        .collection('insertdata').doc(snapshots.data!.docs[index].id).
+                                                                    delete();
+                                                                    Navigator.pop(context);
+                                                                  }, child:Text('Delete',
+                                                                    style: TextStyle(color: Colors.red),), )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )
+                                                      );
+                                                    });
+
+                                                  },
+                                                  onTap: ()async{
+
+                                                    Navigator.push(context, MaterialPageRoute(builder:
+                                                        (context)=>View(
+                                                      task: snapshots.data!.docs[index]['task'].toString()??"",
+                                                      date: snapshots.data!.docs[index]['date'].toString()??"",
+                                                      time:snapshots.data!.docs[index]['time'].toString()??"",
+                                                      note: snapshots.data!.docs[index]['note'].toString()??"",
+                                                      catagery:snapshots.data!.docs[index]['category'].toString() ,)));
+                                                  },
+                                                  title: Text(snapshots.data!.docs[index]['task'].toString()??""),
+                                                  subtitle: Text(snapshots.data!.docs[index]['date']??""),
+                                                  trailing: Text(snapshots.data!.docs[index]['time']??""),
+                                                ),
+                                              ):SizedBox();
+                                          }
+                                      );
+                                    })
+
+                            )),
 
               ],
             ),

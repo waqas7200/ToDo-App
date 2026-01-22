@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/firebase_options.dart';
+import 'package:todo_app/view/source/auth_screens/login_screen/lodin.dart';
 import 'package:todo_app/view/source/onbording_screens/onbording_screens.dart';
 
 void main()
@@ -24,7 +25,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnbordingScreens(),
+      home:
+      //AuthScreens()
+      OnbordingScreens(),
     );
   }
 }

@@ -126,7 +126,7 @@ class _SignUpState extends State<SignUp> {
 
                       });
                       String userid=await FirebaseAuth.instance.currentUser!.uid;
-                      await FirebaseFirestore.instance.collection('user').doc(userid).set({
+                      await FirebaseFirestore.instance.collection('todoapp').doc(userid).set({
                         'name':namecontroller.text,
                         'email':emailcontroller.text,
                         'id':userid,

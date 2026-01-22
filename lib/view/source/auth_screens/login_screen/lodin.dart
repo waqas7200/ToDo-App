@@ -91,12 +91,12 @@ class _AuthScreensState extends State<AuthScreens> {
                                  setState(() {
 
                                  });
-                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>BotomNavigation_bar()));
                            }).
                            onError((handleError,error){
                              isLoading=false;
                              setState(() {
-
+                         print('error ha ');
                              });
 
                              //print("error$error{error}");

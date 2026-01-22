@@ -166,7 +166,9 @@ class _AddTasksState extends State<AddTasks> {
               ),
 
 
-
+           // date picker===================================
+              //===========================================
+              //==========================================
               Padding(
                 padding: const EdgeInsets.only(left: 30,top: 10),
                 child: OnbordingText(text1:'Date', color: Appcolors.maincolor,
@@ -207,7 +209,9 @@ class _AddTasksState extends State<AddTasks> {
                   )
               ),
 
-              //Time picker
+              //Time picker=================================
+              //===============================================
+              //===============================================
               Padding(
                   padding: const EdgeInsets.only(left: 30,top: 15),
                   child:Row(
@@ -304,7 +308,7 @@ class _AddTasksState extends State<AddTasks> {
                  await FirebaseFirestore.instance.collection('todoapp').doc(userid)
                      .collection('insertdata').doc(id).set({
                    'task':taskcontroller.text,
-                   'category':selectedcard==0?'work':selectedcard==1?'persnol':selectedcard==2?'shoping':selectedcard==3?'Halth':SizedBox(),
+                   'category':selectedcard==0?'work':selectedcard==1?'persnol':selectedcard==2?'shoping':selectedcard==3?'Health':SizedBox(),
                    'time': selectedtime == null ? '' : selectedtime!.format(context),
                    'date': selectedate == null ? '' : DateFormat('dd-MM-yyyy').format(selectedate!),
                    'note':notecontroller.text,

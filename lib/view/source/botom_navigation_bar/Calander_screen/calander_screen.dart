@@ -18,7 +18,7 @@ class _CalanderScreenState extends State<CalanderScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 10,right: 10),
             child: SizedBox(
-              height: 350,
+              height: 400,
               child: Card(
                 color: Colors.green.shade50,
                 child: TableCalendar(
